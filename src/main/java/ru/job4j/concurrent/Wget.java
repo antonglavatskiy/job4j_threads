@@ -9,7 +9,7 @@ public class Wget {
                             System.out.print("\rLoading : " + i  + "%");
                             Thread.sleep(1000);
                         }
-                        System.out.println("\nLoad completed");
+                        System.out.println(System.lineSeparator() + "Load completed");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
