@@ -63,10 +63,6 @@ public class Wget implements Runnable {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        /*
-        Runs with parameters: https://proof.ovh.net/files/10Mb.dat 1048576 10MB.dat
-        Work time ~ 10_000 ms
-         */
         long start = System.currentTimeMillis();
         validate(args);
         String url = args[0];
