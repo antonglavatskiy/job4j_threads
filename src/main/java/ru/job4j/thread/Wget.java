@@ -4,13 +4,16 @@ import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Wget implements Runnable {
     private final String url;
     private final int speed;
     private final String fileName;
+    public static final Pattern FILE_NAME =
+            Pattern.compile("^[\\w,\\s-]+[.][A-Za-z0-9]{3}$");
+    public static final int BUFFER = 1024;
+    public static final int ONE_SECOND = 1000;
 
     public Wget(String url, int speed, String fileName) {
         this.url = url;
@@ -22,17 +25,17 @@ public class Wget implements Runnable {
     public void run() {
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
-            byte[] dataBuffer = new byte[1024];
+            byte[] dataBuffer = new byte[BUFFER];
             int bytesRead;
             int downloadData = 0;
             long startTime = System.currentTimeMillis();
-            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+            while ((bytesRead = in.read(dataBuffer, 0, BUFFER)) != -1) {
                 downloadData += bytesRead;
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
                 if (downloadData >= speed) {
                     long workTime = System.currentTimeMillis() - startTime;
-                    if (workTime < 1000) {
-                        Thread.sleep(1000 - workTime);
+                    if (workTime < ONE_SECOND) {
+                        Thread.sleep(ONE_SECOND - workTime);
                     }
                     downloadData = 0;
                     startTime = System.currentTimeMillis();
@@ -55,9 +58,7 @@ public class Wget implements Runnable {
         if (Integer.parseInt(args[1]) < 1) {
             throw new IllegalArgumentException("Enter speed more than zero");
         }
-        Pattern pattern = Pattern.compile("^[\\w,\\s-]+[.][A-Za-z0-9]{3}$");
-        Matcher matcher = pattern.matcher(args[2]);
-        if (!matcher.matches()) {
+        if (!FILE_NAME.matcher(args[2]).matches()) {
             throw new IllegalArgumentException("Enter correct file name");
         }
     }
