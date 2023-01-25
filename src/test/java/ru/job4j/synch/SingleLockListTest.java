@@ -8,7 +8,8 @@ import java.util.TreeSet;
 
 import static org.assertj.core.api.Assertions.*;
 
-class SingleLockListTest {
+public class SingleLockListTest {
+
     @Test
     public void whenIt(){
         var init = new ArrayList<Integer>();
