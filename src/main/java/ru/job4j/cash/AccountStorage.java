@@ -24,19 +24,15 @@ public class AccountStorage {
     }
 
     public synchronized Optional<Account> getById(int id) {
-        Optional<Account> rsl = Optional.empty();
-        Account account = accounts.get(id);
-        if (account != null) {
-            rsl = Optional.of(account);
-        }
-        return rsl;
+        return Optional.ofNullable(accounts.get(id));
     }
 
     public boolean transfer(int fromId, int toId, int amount) {
         boolean rsl = false;
         Optional<Account> from = getById(fromId);
         Optional<Account> to = getById(toId);
-        if (from.isPresent() && to.isPresent()) {
+        if (from.isPresent() && to.isPresent()
+                && from.get().amount() >= amount) {
             Account fromAcc = new Account(from.get().id(), from.get().amount() - amount);
             Account toAcc = new Account(to.get().id(), to.get().amount() + amount);
             update(fromAcc);

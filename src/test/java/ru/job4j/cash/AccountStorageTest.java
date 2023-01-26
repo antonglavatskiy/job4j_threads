@@ -53,4 +53,19 @@ class AccountStorageTest {
                 .orElseThrow(() -> new IllegalStateException("Not found account by id = 1"));
         assertThat(storage.transfer(1, 2, 100)).isFalse();
     }
+
+    @Test
+    void whenTransferFromNotEnoughAmount() {
+        var storage = new AccountStorage();
+        storage.add(new Account(1, 50));
+        storage.add(new Account(2, 100));
+        storage.transfer(1, 2, 100);
+        var firstAccount = storage.getById(1)
+                .orElseThrow(() -> new IllegalStateException("Not found account by id = 1"));
+        var secondAccount = storage.getById(2)
+                .orElseThrow(() -> new IllegalStateException("Not found account by id = 2"));
+        assertThat(firstAccount.amount()).isEqualTo(50);
+        assertThat(secondAccount.amount()).isEqualTo(100);
+        assertThat(storage.transfer(1, 2, 100)).isFalse();
+    }
 }
