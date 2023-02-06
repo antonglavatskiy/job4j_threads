@@ -7,25 +7,34 @@ import static org.assertj.core.api.Assertions.*;
 class SimpleBlockingQueueTest {
     @Test
     public void whenWorkTwoThreads() throws InterruptedException {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>();
+        int size = 1;
+        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(size);
         Thread producer = new Thread(
                 () -> {
-                    int value = 1;
-                    queue.offer(value);
-                    System.out.println(Thread.currentThread().getName() + " add value " + value);
+                    try {
+                        int value = 1;
+                        queue.offer(value);
+                        System.out.println(Thread.currentThread().getName() + " add value " + value);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
                 },
                 "Producer"
         );
         Thread consumer = new Thread(
                 () -> {
-                    int value = queue.poll();
-                    System.out.println(Thread.currentThread().getName() + " consumes " + value);
+                    try {
+                        int value = queue.poll();
+                        System.out.println(Thread.currentThread().getName() + " consumes " + value);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
                 },
                 "Consumer"
         );
         producer.start();
-        producer.join();
         consumer.start();
+        producer.join();
         consumer.join();
     }
 
