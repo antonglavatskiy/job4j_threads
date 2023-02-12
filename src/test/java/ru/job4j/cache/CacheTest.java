@@ -23,13 +23,23 @@ class CacheTest {
     }
 
     @Test
-    public void whenUpdate() {
+    public void whenUpdateThenChangeVersion() {
+        Cache cache = new Cache();
+        Base user = new Base(1, 0);
+        user.setName("User");
+        cache.add(user);
+        assertThat(cache.update(user)).isTrue();
+        assertThat(cache.getMemory().get(user.getId()).getVersion()).isEqualTo(1);
+    }
+
+    @Test
+    public void whenUpdateThenChangeName() {
         Cache cache = new Cache();
         Base user = new Base(1, 0);
         user.setName("User");
         cache.add(user);
         user.setName("Admin");
         assertThat(cache.update(user)).isTrue();
-        assertThat(cache.getMemory().get(user.getId()).getVersion()).isEqualTo(1);
+        assertThat(cache.getMemory().get(user.getId()).getName()).isEqualTo("Admin");
     }
 }
