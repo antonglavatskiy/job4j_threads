@@ -16,7 +16,7 @@ public class NioDemo {
                 if (count != -1) {
                     buffer.rewind();
                     for (int i = 0; i < count; i++) {
-                        System.out.print((char) buffer.get());
+                        System.out.println((char) buffer.get());
                     }
                 }
             } while (count != -1);
