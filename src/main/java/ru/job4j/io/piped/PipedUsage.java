@@ -23,7 +23,7 @@ public class PipedUsage {
                     try {
                         int ch;
                         while ((ch = in.read()) != -1) {
-                            System.out.println((char) ch);
+                            System.out.print((char) ch);
                         }
                         in.close();
                     } catch (IOException e) {
